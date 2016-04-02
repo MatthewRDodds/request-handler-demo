@@ -17,16 +17,12 @@ class CheckOutHandler < Handler
   private
 
   def save
-    begin
-      check_out.save!
+    check_out.save!
+  rescue StandardError => ex
+    @error = ex.message
+    @status = status_for(:bad_request)
 
-      return true
-    rescue => ex
-      @error = ex.message
-      @status = status_for(:bad_request)
-
-      return false
-    end
+    return
   end
 
   def record_invalid?
